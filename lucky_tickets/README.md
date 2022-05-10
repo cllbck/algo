@@ -1,0 +1,1 @@
+### Algorithm for counting the number of lucky tickets. Based on http://www.ega-math.narod.ru/Quant/Tickets.htm (rus)
