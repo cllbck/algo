@@ -20,6 +20,8 @@ var cases = []caseFunc{
 	{"shellSort", shellSort},
 	{"selectionSort", selectionSort},
 	{"heapSort", heapSort},
+	{"quickSort", quickSort},
+	{"mergeSort", mergeSortWrapper},
 }
 
 func bubbleSort(arr []int) {
@@ -100,6 +102,62 @@ func heapify(arr []int, i, n int) {
 	}
 }
 
+func quickSort(arr []int) {
+	if len(arr) < 2 {
+		return
+	}
+
+	left, right := 0, len(arr)-1
+
+	for i, _ := range arr {
+		if arr[i] < arr[right] {
+			arr[left], arr[i] = arr[i], arr[left]
+			left++
+		}
+	}
+
+	arr[left], arr[right] = arr[right], arr[left]
+
+	quickSort(arr[:left])
+	quickSort(arr[left+1:])
+	return
+}
+
+func mergeSortWrapper(arr []int) { // wrapper function for mergeSort for match interface caseFunc
+	mergeSort(arr)
+}
+
+func mergeSort(arr []int) []int {
+	if len(arr) < 2 {
+		return arr
+	}
+	mid := (len(arr)) / 2
+	return merge(mergeSort(arr[:mid]), mergeSort(arr[mid:]))
+}
+
+func merge(left, right []int) []int {
+
+	size, i, j := len(left)+len(right), 0, 0
+	slice := make([]int, size, size)
+
+	for k := 0; k < size; k++ {
+		if i > len(left)-1 && j <= len(right)-1 {
+			slice[k] = right[j]
+			j++
+		} else if j > len(right)-1 && i <= len(left)-1 {
+			slice[k] = left[i]
+			i++
+		} else if left[i] < right[j] {
+			slice[k] = left[i]
+			i++
+		} else {
+			slice[k] = right[j]
+			j++
+		}
+	}
+	return slice
+}
+
 func generateRandomArray(maxSize, maxValue int) []int {
 	arr := make([]int, maxSize)
 	for i := 0; i < maxSize; i++ {
@@ -114,11 +172,15 @@ func generateRandomArrays(maxSize, maxValue int) [][]int {
 	arr3 := make([]int, maxSize)
 	arr4 := make([]int, maxSize)
 	arr5 := make([]int, maxSize)
+	arr6 := make([]int, maxSize)
+	arr7 := make([]int, maxSize)
 	copy(arr2, arr1)
 	copy(arr3, arr1)
 	copy(arr4, arr1)
 	copy(arr5, arr1)
-	return [][]int{arr1, arr2, arr3, arr4, arr5}
+	copy(arr6, arr1)
+	copy(arr7, arr1)
+	return [][]int{arr1, arr2, arr3, arr4, arr5, arr6, arr7}
 }
 
 func timeTrackWithResp(f func(number []int), n []int) string {
